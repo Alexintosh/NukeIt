@@ -29,6 +29,11 @@ Most macOS applications leave behind files after you drag them to the Trash. `nu
 
 ## 💻 Installation
 
+### Install via curl
+`curl -fsSL https://raw.githubusercontent.com/Alexintosh/NukeIt/main/install.sh | bash`
+
+This will download and install the nuke binary to `/usr/local/bin`, making it available system-wide.
+
 ### From source
 
 ```bash
