@@ -6,21 +6,27 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // SimplePlist represents the basic structure of a plist file
 type SimplePlist struct {
-	Dict PlistDict `xml:"dict"`
+	XMLName xml.Name  `xml:"plist"`
+	Dict    PlistDict `xml:"dict"`
 }
 
 // PlistDict represents a dictionary in a plist file
 type PlistDict struct {
-	Keys   []string    `xml:"key"`
-	Values []PlistItem `xml:",any"`
+	Items []xml.Name `xml:",any"`
 }
 
 // PlistItem is an interface for plist values
 type PlistItem interface{}
+
+// PlistString represents a string in a plist
+type PlistString struct {
+	Value string `xml:",chardata"`
+}
 
 // ParseBundleID extracts the bundle ID from an app's Info.plist file
 func (f *AppFinder) ParseBundleID(appPath string) (string, error) {
@@ -44,20 +50,37 @@ func (f *AppFinder) ParseBundleID(appPath string) (string, error) {
 		return "", fmt.Errorf("failed to read Info.plist: %w", err)
 	}
 	
-	// Parse XML
-	var plist SimplePlist
-	if err := xml.Unmarshal(content, &plist); err != nil {
-		return "", fmt.Errorf("failed to parse Info.plist: %w", err)
+	// For testing simplicity, let's do a simple search for CFBundleIdentifier in the XML
+	// This is more reliable than trying to parse the XML which can have different formats
+	contentStr := string(content)
+	
+	// Look for the pattern: <key>CFBundleIdentifier</key>\s*<string>VALUE</string>
+	bundleIDStart := strings.Index(contentStr, "<key>CFBundleIdentifier</key>")
+	if bundleIDStart == -1 {
+		return "", fmt.Errorf("bundle ID not found in Info.plist")
 	}
 	
-	// Find the bundle ID
-	for i, key := range plist.Dict.Keys {
-		if key == "CFBundleIdentifier" && i < len(plist.Dict.Values) {
-			if bundleID, ok := plist.Dict.Values[i+1].(string); ok {
-				return bundleID, nil
-			}
-		}
+	// Find the opening <string> tag after the key
+	stringTagStart := strings.Index(contentStr[bundleIDStart:], "<string>")
+	if stringTagStart == -1 {
+		return "", fmt.Errorf("bundle ID value not found in Info.plist")
 	}
 	
-	return "", fmt.Errorf("bundle ID not found in Info.plist")
+	// Adjust the position to account for the substring operation
+	stringTagStart += bundleIDStart + len("<string>")
+	
+	// Find the closing </string> tag
+	stringTagEnd := strings.Index(contentStr[stringTagStart:], "</string>")
+	if stringTagEnd == -1 {
+		return "", fmt.Errorf("bundle ID value not properly formatted in Info.plist")
+	}
+	
+	// Extract the bundle ID
+	bundleID := contentStr[stringTagStart : stringTagStart+stringTagEnd]
+	
+	if bundleID == "" {
+		return "", fmt.Errorf("empty bundle ID in Info.plist")
+	}
+	
+	return bundleID, nil
 } 

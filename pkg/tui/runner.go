@@ -21,7 +21,7 @@ func RunTUI(appName string, dryRun, force, verbose bool) error {
 	
 	// If there was an error, return it
 	if finalModel.errorMsg != "" {
-		return fmt.Errorf(finalModel.errorMsg)
+		return fmt.Errorf("%s", finalModel.errorMsg)
 	}
 	
 	return nil
