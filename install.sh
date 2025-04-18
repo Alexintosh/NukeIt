@@ -16,7 +16,7 @@ fi
 # Download binary
 echo "Downloading nuke binary..."
 TEMP_DIR=$(mktemp -d)
-curl -fsSL https://github.com/Alexintosh/NukeIt/raw/refs/heads/main/nuke -o "${TEMP_DIR}/nuke"
+curl -fsSL https://github.com/Alexintosh/NukeIt/releases/download/0.1-alpha/nuke -o "${TEMP_DIR}/nuke"
 
 if [ $? -ne 0 ]; then
   echo -e "${RED}Error: Failed to download the binary.${NC}"
