@@ -39,8 +39,8 @@ This will download and install the nuke binary to `/usr/local/bin`, making it av
 ### From source
 
 ```bash
-git clone https://github.com/alexintosh/gocleaner.git
-cd gocleaner
+git clone https://github.com/alexintosh/NukeIt.git
+cd NukeIt
 go build -o nuke cmd/nuke/main.go
 ```
 
