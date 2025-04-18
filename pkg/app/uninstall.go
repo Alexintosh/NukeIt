@@ -6,6 +6,7 @@ import (
 
 	"github.com/alexintosh/gocleaner/pkg/cleaner"
 	"github.com/alexintosh/gocleaner/pkg/finder"
+	"github.com/alexintosh/gocleaner/pkg/tui"
 	"github.com/spf13/cobra"
 )
 
@@ -13,6 +14,7 @@ var (
 	dryRun  bool
 	force   bool
 	verbose bool
+	noTUI   bool
 )
 
 func init() {
@@ -28,6 +30,7 @@ like caches, preferences, logs, etc. from various macOS system paths.`,
 	uninstallCmd.Flags().BoolVar(&dryRun, "dry-run", false, "Show what would be deleted, but don't delete")
 	uninstallCmd.Flags().BoolVar(&force, "force", false, "Skip confirmation prompt and delete files immediately")
 	uninstallCmd.Flags().BoolVar(&verbose, "verbose", false, "Show detailed scanning and deletion info")
+	uninstallCmd.Flags().BoolVar(&noTUI, "no-tui", false, "Disable the interactive terminal UI")
 
 	rootCmd.AddCommand(uninstallCmd)
 }
@@ -38,6 +41,17 @@ func runUninstall(cmd *cobra.Command, args []string) error {
 	// Remove .app suffix if provided - we'll handle both cases in the finder
 	appName = strings.TrimSuffix(appName, ".app")
 
+	// If not using TUI, use the original CLI approach
+	if noTUI {
+		return runCLIUninstall(appName)
+	}
+
+	// Otherwise, use the TUI
+	return tui.RunTUI(appName, dryRun, force, verbose)
+}
+
+// runCLIUninstall runs the original CLI-based uninstall process
+func runCLIUninstall(appName string) error {
 	// Find app bundle and associated files
 	appFinder := finder.NewAppFinder(verbose)
 	foundFiles, err := appFinder.FindAllAssociatedFiles(appName)

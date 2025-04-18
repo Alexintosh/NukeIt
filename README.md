@@ -12,6 +12,20 @@ Most macOS applications leave behind files after you drag them to the Trash. `nu
 - Reads app bundle ID from `.app` files
 - Provides dry-run, verbose, and force-delete options
 - Confirms file deletion before removing anything (unless `--force` is used)
+- Interactive Terminal UI (TUI) for a more visual experience
+
+### ✨ TUI Features
+
+- **Spinner** during file scanning process
+- **Interactive file selection** to choose which files to delete
+- **Progress bar** showing deletion progress
+- **Keyboard controls**:
+  - `↑/↓` - Navigate through files
+  - `Space` - Toggle selection of a file
+  - `a` - Select all files
+  - `n` - Deselect all files
+  - `Enter` - Confirm and delete selected files
+  - `Ctrl+C` - Quit
 
 ## 💻 Installation
 
@@ -32,7 +46,7 @@ mv nuke /usr/local/bin/
 ## 💻 Usage
 
 ```bash
-nuke uninstall <AppName> [--dry-run] [--force] [--verbose]
+nuke uninstall <AppName> [--dry-run] [--force] [--verbose] [--no-tui]
 ```
 
 ### Example
@@ -46,6 +60,7 @@ nuke uninstall Spotify
 - `--dry-run` – Show what would be deleted, but don't delete.
 - `--force` – Skip confirmation prompt and delete files immediately.
 - `--verbose` – Show detailed scanning and deletion info.
+- `--no-tui` – Disable the interactive TUI and use the simple CLI interface.
 
 ## 📂 macOS Paths Scanned
 
