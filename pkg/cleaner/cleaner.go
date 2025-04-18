@@ -56,7 +56,7 @@ func (c *AppCleaner) DeleteFiles(files []string) (int, error) {
 	deleted := 0
 	
 	for _, file := range files {
-		if !c.isSafeToDelete(file) {
+		if !c.IsSafeToDelete(file) {
 			if c.verbose {
 				fmt.Printf("Skipping potentially unsafe path: %s\n", file)
 			}
@@ -77,8 +77,17 @@ func (c *AppCleaner) DeleteFiles(files []string) (int, error) {
 	return deleted, nil
 }
 
-// isSafeToDelete checks if a file or directory is safe to delete
-func (c *AppCleaner) isSafeToDelete(path string) bool {
+// DeleteSingleFile deletes a single file and returns any error
+func (c *AppCleaner) DeleteSingleFile(file string) error {
+	if c.verbose {
+		fmt.Printf("Deleting: %s\n", file)
+	}
+	
+	return os.RemoveAll(file)
+}
+
+// IsSafeToDelete checks if a file or directory is safe to delete
+func (c *AppCleaner) IsSafeToDelete(path string) bool {
 	// Check if the path is a critical system path
 	for _, criticalPath := range criticalPaths {
 		if strings.HasPrefix(path, criticalPath) {
