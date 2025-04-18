@@ -1,10 +1,10 @@
-# 🧹 gocleaner - CLI AppCleaner Alternative for macOS
+# 🧹 nuke - CLI AppCleaner Alternative for macOS
 
-`gocleaner` is a command-line tool written in Go for macOS that helps users fully uninstall applications by removing the main app bundle **and** associated files (like caches, preferences, logs, etc.).
+`nuke` is a command-line tool written in Go for macOS that helps users fully uninstall applications by removing the main app bundle **and** associated files (like caches, preferences, logs, etc.).
 
 ## 📌 Purpose
 
-Most macOS applications leave behind files after you drag them to the Trash. `gocleaner` helps you find and remove these leftover files, keeping your system clean.
+Most macOS applications leave behind files after you drag them to the Trash. `nuke` helps you find and remove these leftover files, keeping your system clean.
 
 ## 🛠 Features
 
@@ -20,25 +20,25 @@ Most macOS applications leave behind files after you drag them to the Trash. `go
 ```bash
 git clone https://github.com/alexintosh/gocleaner.git
 cd gocleaner
-go build -o gocleaner cmd/gocleaner/main.go
+go build -o nuke cmd/nuke/main.go
 ```
 
 Then move the binary to your PATH:
 
 ```bash
-mv gocleaner /usr/local/bin/
+mv nuke /usr/local/bin/
 ```
 
 ## 💻 Usage
 
 ```bash
-gocleaner uninstall <AppName> [--dry-run] [--force] [--verbose]
+nuke uninstall <AppName> [--dry-run] [--force] [--verbose]
 ```
 
 ### Example
 
 ```bash
-gocleaner uninstall Spotify
+nuke uninstall Spotify
 ```
 
 ### Flags

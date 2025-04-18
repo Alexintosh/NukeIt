@@ -8,9 +8,9 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "gocleaner",
+	Use:   "nuke",
 	Short: "A CLI tool to fully uninstall macOS applications",
-	Long: `gocleaner is a command-line tool for macOS that helps users fully uninstall applications 
+	Long: `nuke is a command-line tool for macOS that helps users fully uninstall applications 
 by removing the main app bundle and associated files like caches, preferences, logs, etc.`,
 }
 
